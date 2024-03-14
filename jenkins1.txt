@@ -1,0 +1,68 @@
+pipeline {
+    agent any
+    
+    environment {
+        DIRECTORY_PATH         = 'C:/Users/hp'
+        TESTING_ENVIRONMENT    = 'TESTING MY ENVIRONMENT '
+        PRODUCTION_ENVIRONMENT = 'LAKSHAY SAINI'
+    }
+    
+    stages {
+        stage('Build') {
+            steps {
+                echo "Fetch the source code from the directory path: ${DIRECTORY_PATH}"
+                echo "Compile the code and get artifacts"
+            }
+        }
+
+        stage('Test') {
+            steps {
+                echo "Unit tests"
+                echo "Integration tests"
+            }
+        }
+
+    post {
+                
+                success {
+                    emailext  subject: 'Unit Test Status - Success', 
+                              body: 'Unit Test has been completed successfully.', 
+                              to: "lakshyasaini004@gmail.com",
+                              attachLog: true
+                }
+                failure {
+                    emailext subject: 'Unit Test Status - Failure', 
+                              body: 'Unit Test has failed.', 
+                             to: "lakshyasaini004@gmail.com",
+                              attachLog: true
+                }
+            }
+
+        stage('Code Quality Check') {
+            steps {
+                echo"Check the quality of the code"
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                echo "Deploy the application to a testing environment specified by the environment variable: ${TESTING_ENVIRONMENT}"
+            }
+        }
+        
+        stage('Approval') {
+            steps {
+                echo"PAUSING FOR 10 SECONDS "
+               sleep 10
+               echo"CONTINUING CODE TO PRODUCTION"
+               
+            }
+        }
+        
+        stage('Deploy to Production') {
+            steps {
+               echo "Deploy the application to a production environment specified by the environment variable: ${PRODUCTION_ENVIRONMENT}"
+            }
+        }
+    }
+}
