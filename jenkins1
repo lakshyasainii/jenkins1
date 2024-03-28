@@ -1,0 +1,78 @@
+pipeline {
+    agent any
+    
+    
+
+    stages {
+        stage('Build') {
+            steps {
+                echo 'Stage 1: Build - Building the code'
+                
+                git branch: 'main', url: 'https://github.com/lakshyasainii/jenkins1.git'
+                echo 'Installing dependencies...'
+             
+                echo 'Building the React application...'
+                
+            }
+        }
+        stage('Unit And Integration Tests') {
+            steps {
+                echo 'Stage 2: Unit and Integration Tests - Running unit tests and integration tests...'
+                echo 'Running unit tests...'
+                
+                echo 'Running integration tests...'
+                
+            }
+        }
+        stage('Code Analysis') {
+            steps {
+                echo 'Stage 3: Code Analysis - Running code analysis tool to ensure code quality...'
+                echo 'No specific code analysis step for this project.'
+                // You can integrate linting or other code analysis tools here if needed
+            }
+        }
+        stage('Security Scan') {
+            steps {
+                echo 'Stage 4: Security Scan - Performing a security scan on the code...'
+                echo 'No specific staging deployment step for this project.'
+                // You can add deployment to staging environment if needed
+            }
+        }
+        stage('Deploy to Staging') {
+            steps {
+                echo 'Stage 5: Deploy to Staging - Deploying the application to a staging server...'
+                echo 'No specific staging deployment step for this project.'
+                // You can add deployment to a staging environment if needed
+            }
+        }
+        stage('Integration Tests on Staging') {
+            steps {
+                echo 'Stage 6: Integration Tests on Staging - Running integration tests on the staging environment...'
+                echo 'No specific staging integration tests step for this project.'
+                // You can add integration tests on staging environment if needed
+            }
+        }
+        stage('Deploy to Production') {
+            steps {
+                echo 'Stage 7: Deploy to Production - Deploying the application to a production server...'
+                echo 'No specific production deployment step for this project.'
+                // You can add deployment to production environment if needed
+            }
+        }
+    }
+    
+   post {
+        success {
+            emailext subject: "Pipeline '${currentBuild.fullDisplayName}' Successful",
+                      body: 'The build was successful!!',
+                      to: 'lakshyasaini004@gmail.com',
+                      attachLog: true
+        }
+        failure {
+            emailext subject: "Pipeline '${currentBuild.fullDisplayName}' Failed",
+                      body: 'The build has failed...',
+                      to: 'lakshyasaini004@gmail.com',
+                      attachLog: true
+        }
+   }
+}
